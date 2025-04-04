@@ -1,6 +1,12 @@
 
 version: 2
 
+sources:
+  - name: manage_db
+    database: MANAGE_DB
+    schema: DBT_FRODRIGUES
+    tables:
+      - name: sales
 models:
     - name: my_first_dbt_model
       description: "A starter dbt model"
