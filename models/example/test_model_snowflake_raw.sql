@@ -5,4 +5,4 @@ SELECT
     created_at,
     total_amount
 FROM {{ ref('orders') }}
-WHERE status = 'complete'
+
