@@ -31,4 +31,9 @@ models:
       tests:
         - unique
         - not_null        
+    - name: orders.sql
+      description: "another dbt model to dump in snowflake as test"
+      tests:
+        - unique
+        - not_null        
         
