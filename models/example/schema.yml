@@ -19,3 +19,10 @@ models:
             tests:
                 - unique
                 - not_null
+
+    - name: test_dbt_model
+      description: "a dbt model to dump in snowflake as test"
+      tests:
+        - unique
+        - not_null
+        
