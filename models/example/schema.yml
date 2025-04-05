@@ -9,6 +9,7 @@ sources:
       - name: products
       - name: employees
       - name: customers
+        identifier: CUSTOMERS 
       - name: countries
       - name: cities
       - name: categories
