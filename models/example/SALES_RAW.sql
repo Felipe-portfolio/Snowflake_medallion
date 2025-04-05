@@ -1,6 +1,6 @@
 {{ config(
     materialized='table',
-    alias='final_orders_table',
+    alias='sales_raw',
     schema='RAW_DBT',
     database='MANAGE_DB'
 ) }} 
@@ -17,5 +17,5 @@ SELECT
   TRANSACTIONNUMBER  as transactionID, 
   CURRENT_TIMESTAMP AS ingested_at  
 FROM {{ ref('sales') }}  
-QUALIFY ROW_NUMBER() OVER (PARTITION BY order_key ORDER BY ingested_at DESC) = 1
+
 
