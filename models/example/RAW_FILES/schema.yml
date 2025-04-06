@@ -1,0 +1,50 @@
+version: 2
+
+sources:
+  - name: manage_db
+    database: MANAGE_DB
+    schema: DBT_FRODRIGUES
+    tables:
+      - name: sales
+      - name: products
+      - name: employees
+      - name: customers
+        identifier: CUSTOMERS 
+      - name: countries
+      - name: cities
+      - name: categories
+models:
+  - name: my_first_dbt_model
+    description: "A starter dbt model"
+    columns:
+      - name: id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: my_second_dbt_model
+    description: "A starter dbt model"
+    columns:
+      - name: id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+
+  - name: test_dbt_model
+    description: "a dbt model to dump in snowflake as test"
+    tests:
+      - unique
+      - not_null
+
+  - name: test_model_snowflake_raw.sql
+    description: "another dbt model to dump in snowflake as test"
+    tests:
+      - unique
+      - not_null
+  - name: orders.sql
+    description: "another dbt model to dump in snowflake as test"
+    tests:
+      - unique
+      - not_null
