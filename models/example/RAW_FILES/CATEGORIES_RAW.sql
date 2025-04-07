@@ -6,7 +6,7 @@
 ) }} 
 
 SELECT  
-CATEGORYID as CategoryID,
+CATEGORYID as Category_CategoryID,
 CATEGORYNAME as Category_Name,
 CURRENT_TIMESTAMP AS ingested_at  
 FROM {{ ref('categories') }}  
