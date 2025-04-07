@@ -8,6 +8,7 @@
 SELECT
   DATE_TRUNC('day', sa.sales_date) AS day,
   p.productid,
+  sa.order_key as sales_order_key,
   p.product_name,
   p.product_class,
   p.category_name,
@@ -20,7 +21,7 @@ SELECT
   price_with_discount * sa.total_sold as total_revenue_discount,
   gross_total_revenue - total_revenue_discount as discount_in_dollars 
 FROM {{ref ('silver_fact_sales')}} AS sa
-left join {{ref ('silver_dim_products') }} as p on p.productid=sa.productid
+left join {{ref ('silver_dim_products') }} as p on p.productid=sa.sales_product_id
 left join {{ref ('silver_dim_employees') }} as e on e.employeeid=sa.salespersonid
-GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12
+GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13
 order by 1 asc
