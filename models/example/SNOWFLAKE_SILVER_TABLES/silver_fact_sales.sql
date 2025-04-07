@@ -9,7 +9,7 @@ SELECT
   s.Order_Key,
   s.transactionID,
   s.Sales_Date::DATE as sales_date,
-  s.order_date,
+  s.ProductID,
   s.SALESPERSONID,
   cu.CustomerID   AS customer_key,
   e.EmployeeID,
@@ -29,6 +29,6 @@ SELECT
   FROM {{ ref ('SALES_RAW') }} as s
 LEFT JOIN {{ ref ('CUSTOMERS_RAW') }} AS cu ON s.Customer_Key = cu.CustomerID
 LEFT JOIN {{ ref ('EMPLOYEES_RAW') }} AS e ON s.salespersonID = e.EMPLOYEEID
-left join  {{ ref ('PRODUCTS_RAW') }} as p on s.order_date=p.productid
+left join  {{ ref ('PRODUCTS_RAW') }} as p on s.ProductID=p.productid
  LEFT JOIN {{ ref('CATEGORIES_RAW') }} as ca on ca.categoryID=p.categoryID
 WHERE s.ORDER_KEY IS NOT NULL and Sales_Date is not null
