@@ -5,30 +5,36 @@
     database='MANAGE_DB'
 ) }} 
 
+WITH deduplicated_sales AS (
+  SELECT *,
+         ROW_NUMBER() OVER (PARTITION BY s.Order_Key ORDER BY s.Sales_Date) AS rn
+  FROM {{ ref('SALES_RAW') }} as s
+  LEFT JOIN {{ ref('CUSTOMERS_RAW') }} AS cu ON s.Customer_Key = cu.CustomerID
+  LEFT JOIN {{ ref('EMPLOYEES_RAW') }} AS e ON s.salespersonID = e.EMPLOYEEID
+  LEFT JOIN {{ ref('PRODUCTS_RAW') }} AS p ON s.Sales_ProductID = p.Product_ProductID
+  LEFT JOIN {{ ref('CATEGORIES_RAW') }} AS ca ON ca.Category_CategoryID = p.Product_CategoryID
+  WHERE s.Order_Key IS NOT NULL AND s.Sales_Date IS NOT NULL
+)
+
 SELECT
-  s.Order_Key,
-  s.transactionID,
-  s.Sales_Date::DATE as sales_date,
-  s.ProductID as sales_product_id,
-  s.SALESPERSONID,
-  cu.CustomerID   AS customer_key,
-  e.EmployeeID,
-  s.Total_Sold,
-  s.Discount_in_percent,
-  s.Total_Price,
-  p.ProductID as product_product_id,
-  p.Product_Name,
-  p.Price_in_dollars,
-  p.Product_Class,
-  p.CategoryID,
-  p.Modify_Date,
-  p.RESITANCE_CATEGORY,
-  p.Is_Allergic,
-  p.Vitality_Days,
-  ca.Category_Name
-  FROM {{ ref ('SALES_RAW') }} as s
-LEFT JOIN {{ ref ('CUSTOMERS_RAW') }} AS cu ON s.Customer_Key = cu.CustomerID
-LEFT JOIN {{ ref ('EMPLOYEES_RAW') }} AS e ON s.salespersonID = e.EMPLOYEEID
-left join  {{ ref ('PRODUCTS_RAW') }} as p on s.ProductID=p.productid
- LEFT JOIN {{ ref('CATEGORIES_RAW') }} as ca on ca.categoryID=p.categoryID
-WHERE s.ORDER_KEY IS NOT NULL and Sales_Date is not null
+  Order_Key,
+  transactionID,
+  Sales_Date::DATE AS sales_date,
+  Sales_ProductID,
+  SalespersonID,
+  Customer_Key,
+  EmployeeID,
+  Total_Sold,
+  Discount_in_percent,
+  Total_Price,
+  Product_Name,
+  Price_in_dollars,
+  Product_Class,
+  Category_CategoryID,
+  Modify_Date,
+  RESITANCE_CATEGORY,
+  Is_Allergic,
+  Vitality_Days,
+  Category_Name
+FROM deduplicated_sales
+WHERE rn = 1

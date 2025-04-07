@@ -9,7 +9,7 @@ SELECT
   SALESID AS order_key,
   SALESPERSONID AS salespersonID,  
   CUSTOMERID AS customer_key,  
-  PRODUCTID AS PRODUCTID,
+  PRODUCTID AS Sales_ProductID,
   QUANTITY AS total_sold,
   DISCOUNT as discount_in_percent,
   TOTALPRICE as total_price,
