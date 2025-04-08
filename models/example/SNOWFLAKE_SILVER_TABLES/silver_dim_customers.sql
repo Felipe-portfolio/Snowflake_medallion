@@ -7,6 +7,7 @@
 
 SELECT
   cu.CustomerID,
+  cu.cityID,
   cu.First_Name,
   cu.Middle_Initial,
   cu.Last_Name,
