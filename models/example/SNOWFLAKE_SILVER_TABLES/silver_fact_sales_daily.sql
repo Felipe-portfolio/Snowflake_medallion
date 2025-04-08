@@ -13,6 +13,7 @@ SELECT
   p.product_class,
   p.category_name,
   concat(e.employee_first_name,' ',e.employee_last_name) as salesperson,
+  E.employeeid as salesperson_key,
   sa.customer_key,
   sa.Total_sold,
   sa.discount_in_percent as discount,
@@ -24,5 +25,5 @@ SELECT
 FROM {{ref ('silver_fact_sales')}} AS sa
 left join {{ref ('silver_dim_products') }} as p on p.product_productid=sa.sales_productid
 left join {{ref ('silver_dim_employees') }} as e on e.employeeid=sa.salespersonid
-GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14
+GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
 order by 1 asc
