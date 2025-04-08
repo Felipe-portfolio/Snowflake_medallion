@@ -8,21 +8,35 @@
 
 WITH customer_summary AS (
   SELECT
-    customer_key,
-    COUNT(DISTINCT sales_order_key) AS total_orders,
-    SUM(total_sold) AS total_units,
-    SUM(price_in_dollars * total_sold) AS gross_revenue,
-    SUM((price_in_dollars - (discount * price_in_dollars)) * total_sold) AS net_revenue,
-    MIN(day) AS first_purchase,
-    MAX(day) AS last_purchase,
-    ROUND(total_orders / (DATEDIFF('day', first_purchase, last_purchase) / 7), 2) AS orders_per_week,
-    ROUND(SUM(total_sold) / NULLIF(total_orders, 0), 2) AS avg_items_per_order,
-    DATEDIFF('day', MIN(day), MAX(day)) AS lifecycle_days,
-    DATEDIFF('day', MAX(day), '2018-03-05') AS days_since_last_purchase
-  FROM {{ ref('silver_fact_sales_daily') }} as cs
+    cs.customer_key,
+    CONCAT(sc.First_Name, ' ', sc.Middle_Initial, ' ', sc.Last_Name) AS customer_name,
+    sc.CUSTOMER_ADDRESS,
+    city.City_Name,
+    co.Country_Name,
+    city.ZIP_CODE,
+    COUNT(DISTINCT cs.sales_order_key) AS total_orders,
+    SUM(cs.total_sold) AS total_units,
+    SUM(cs.price_in_dollars * cs.total_sold) AS gross_revenue,
+    SUM((cs.price_in_dollars - (cs.discount * cs.price_in_dollars)) * cs.total_sold) AS net_revenue,
+    MIN(cs.day) AS first_purchase,
+    MAX(cs.day) AS last_purchase,
+    ROUND(COUNT(DISTINCT cs.sales_order_key) / NULLIF(DATEDIFF('day', MIN(cs.day), MAX(cs.day)) / 7, 0), 2) AS orders_per_week,
+    ROUND(SUM(cs.total_sold) / NULLIF(COUNT(DISTINCT cs.sales_order_key), 0), 2) AS avg_items_per_order,
+    DATEDIFF('day', MIN(cs.day), MAX(cs.day)) AS lifecycle_days,
+    DATEDIFF('day', MAX(cs.day), '2018-03-05') AS days_since_last_purchase
 
+  FROM {{ ref('silver_fact_sales_daily') }} AS cs
+  LEFT JOIN {{ ref('silver_dim_customers') }} AS sc ON sc.customerID = cs.customer_key
+  LEFT JOIN {{ ref('silver_dim_cities') }} AS city ON sc.cityID = city.cityID
+  LEFT JOIN {{ ref('silver_dim_countries') }} AS co ON city.country_code = co.country_code
 
-  GROUP BY customer_key
+  GROUP BY 
+    cs.customer_key, 
+    sc.First_Name, sc.Middle_Initial, sc.Last_Name, 
+    sc.CUSTOMER_ADDRESS, 
+    city.City_Name, 
+    co.Country_Name,
+    city.ZIP_CODE
 ),
 percentiles AS (
   SELECT 
