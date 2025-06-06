@@ -6,10 +6,10 @@
 ) }} 
 
 SELECT  
-PRODUCTID as ProductID,
+PRODUCTID as Product_ProductID,
 PRODUCTNAME  as Product_Name,
 PRICE as Price_in_dollars,
-CATEGORYID as CategoryID,
+CATEGORYID as Product_CategoryID,
 CLASS as Product_Class,
 MODIFYDATE as Modify_Date,
 RESISTANT as Resitance_category, 

@@ -6,7 +6,7 @@
 ) }} 
 
 SELECT  
-EMPLOYEID as EmployeeID,
+EMPLOYEEID as EmployeeID,
 FIRSTNAME as Employee_First_Name,
 MIDDLEINITIAL as Employee_Middle_Initial,
 LASTNAME as Employee_Last_Name,
